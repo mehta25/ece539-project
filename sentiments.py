@@ -56,15 +56,23 @@ def main():
     trained_lang_sentiment_dict = {}
     while True:
         text_in = input("Enter text to classify: ")
-        if text_in == "exit":
+        exit_codes = ["exit", "quit", "q", "e"]
+        if text_in in exit_codes:
             break
+        if text_in == "":
+            continue
         lang_pred = classifyLanguage(text_in, lang_model, lang_cv, lang_le)
+        if lang_pred not in ["English", "Spanish", "Hindi", "French", "Arabic"]:
+            print("Language not supported")
+            continue
         if lang_pred[0] not in trained_lang_sentiment_dict:
             trained_lang_sentiment_dict[lang_pred[0]] = trainSentiment(lang_pred[0])
         model, cv, le = trained_lang_sentiment_dict[lang_pred[0]]
         sentiment_pred = classifyLanguage(text_in, model, cv, le)
+        print("\n-----------------------------------------------------\n")
         print("Language: " + lang_pred[0])
-        print("Sentiment: " + sentiment_pred[0])
+        print("Sentiment: " + ("Positive" if str(sentiment_pred[0]) == "1" else "Negative"))
+        print("\n-----------------------------------------------------\n")
 
 
 if __name__ == "__main__":
