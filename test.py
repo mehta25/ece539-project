@@ -66,7 +66,7 @@ def trainSentiment(language):
 def test_classify_lang():
     lang_model, lang_cv, lang_le, X_test, y_test = languageClassifier("language.csv")
     score = lang_model.score(X_test, y_test)
-    print('Language Classifier Accuracy Score: ' + str(score))
+    print('     Language Classifier Accuracy Score: ' + str(score) + '\n')
     y_pred = lang_model.predict(X_test)
     #plot_confusion_matrix(y_pred, y_test)
 
@@ -74,7 +74,7 @@ def test_classify_lang():
 def test_sentiment(lang_to_test):
     sent_model, cv, le, X_test, y_test = trainSentiment(lang_to_test[0]) # sentiment model
     score = sent_model.score(X_test, y_test)
-    print('Sentiment Analysis Accuracy Score: ' + str(score))
+    print('     Sentiment Analysis Accuracy Score: ' + str(score) + '\n')
     y_pred = sent_model.predict(X_test)
     #plot_confusion_matrix(y_pred, y_test)
 
@@ -82,10 +82,17 @@ def main():
     lang_to_test = [["English"], ["Spanish"], ["Hindi"], ["French"], ["Arabic"]]
     print('Language Classification Testing Initiated...')
     test_classify_lang()
-
     print('Sentiment Analysis Testing Initiated...')
+    print('Testing English:')
     test_sentiment(lang_to_test[0])
-
+    print('Testing Spanish:')
+    test_sentiment(lang_to_test[1])
+    print('Testing Hindi:')
+    test_sentiment(lang_to_test[2])
+    print('Testing French:')
+    test_sentiment(lang_to_test[3])
+    print('Testing Arabic:')
+    test_sentiment(lang_to_test[4])
 
 if __name__ == "__main__":
     main()
