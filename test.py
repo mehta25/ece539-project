@@ -6,19 +6,21 @@ from sklearn.model_selection import train_test_split as tts
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
-import seaborn as sn
+import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
+
 
 # visualize the results with a confusion matrix. use for both models
-def plot_confusion_matrix(y_classified, y_true):
-    # Compute confusion matrix
-    c_mat = np.zeros((len(y_true),len(y_true)))
-    for i in range(len(y_true)):
-        c_mat[y_classified[i], y_true[i]] += 1
-    disp = sklearn.metrics.ConfusionMatrixDisplay(confusion_matrix=c_mat)
-    disp.plot()
-
+def plot_confusion_matrix(y_classified, y_true, testType, lang):
+    cm = confusion_matrix(y_classified,y_true)
+    plt.figure(figsize=(15,10))
+    sns.heatmap(cm, annot = True)
+    if testType:
+        plt.title('Language Classification')
+    else:
+        plt.title('Sentiment Analysis for ' + str(lang))
+    plt.show()
 
 def languageClassifier(path):
     data = pd.read_csv(path)
@@ -68,7 +70,7 @@ def test_classify_lang():
     score = lang_model.score(X_test, y_test)
     print('     Language Classifier Accuracy Score: ' + str(score) + '\n')
     y_pred = lang_model.predict(X_test)
-    #plot_confusion_matrix(y_pred, y_test)
+    plot_confusion_matrix(y_pred, y_test, True, 'None')
 
 # Method that takes language being tested, constructs model for the language, and prints scores
 def test_sentiment(lang_to_test):
@@ -76,7 +78,8 @@ def test_sentiment(lang_to_test):
     score = sent_model.score(X_test, y_test)
     print('     Sentiment Analysis Accuracy Score: ' + str(score) + '\n')
     y_pred = sent_model.predict(X_test)
-    #plot_confusion_matrix(y_pred, y_test)
+
+    plot_confusion_matrix(y_pred, y_test, False, lang_to_test[0])
 
 def main():
     lang_to_test = [["English"], ["Spanish"], ["Hindi"], ["French"], ["Arabic"]]
